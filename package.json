@@ -4,6 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "db:logs": "docker compose logs -f mongo",
+    "db:shell": "docker compose exec mongo mongosh",
+    "db:status": "docker compose ps",
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,5 +17,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "dotenv": "^18.0.10",
+    "mongodb": "^7.9.0"
+  }
 }

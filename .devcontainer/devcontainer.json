@@ -1,0 +1,10 @@
+{
+  "name": "Node + MongoDB",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:20",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "forwardPorts": [3000, 27017],
+  "postStartCommand": "docker compose up -d",
+  "postCreateCommand": "npm install"
+}
