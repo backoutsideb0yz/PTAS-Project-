@@ -1,15 +1,11 @@
-const { Router } = require('express');
-const controller = require('../controllers/tarefas.controller');
-const { validateTask } = require('../middlewares/validateTasks');
+import { Router } from 'express';
+import * as tarefasController from '../controllers/tarefas.controller.js';
 
-const router = Router();
+const rotas = Router();
 
-router.get('/', controller.list);
-router.get('/:id', controller.getById);
-router.post('/', validateTask({ partial: false }), controller.create);
-router.put('/:id', validateTask({ partial: false }), controller.update);
-router.patch('/:id', validateTask({ partial: true }), controller.update);
-router.patch('/:id/complete', controller.complete);
-router.delete('/:id', controller.remove);
+rotas
+  .route('/')
+  .get(tarefasController.listar)
+  .post(validateTasks, tarefasController.criar);
 
-module.exports = router;
+export default rotas;

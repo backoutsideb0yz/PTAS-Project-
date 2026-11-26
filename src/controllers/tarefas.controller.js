@@ -1,34 +1,29 @@
-const service = require('../services/tarefas.service');
+import * as tarefasService from '../services/tarefas.service.js';
+import { ErroDeValidacao } from '../services/tarefas.service.js';
 
-const wrap = (fn) => (req, res, next) => {
+function responderErro(res, erro, mensagemPadrao) {
+  if (erro instanceof ErroDeValidacao) {
+    return res.status(400).json({ error: erro.message });
+  }
+  console.error(erro);
+  return res.status(500).json({ error: mensagemPadrao });
+}
+
+export const listar = async (req, res) => {
   try {
-    fn(req, res);
-  } catch (err) {
-    next(err);
+    const tarefas = await tarefasService.listar();
+    return res.status(200).json(tarefas);
+  } catch (erro) {
+    return responderErro(res, erro, 'Erro interno ao listar as tarefas.');
   }
 };
 
-exports.list = wrap((req, res) => {
-  res.json(service.list(req.query));
-});
-
-exports.getById = wrap((req, res) => {
-  res.json(service.getById(req.params.id));
-});
-
-exports.create = wrap((req, res) => {
-  res.status(201).json(service.create(req.body));
-});
-
-exports.update = wrap((req, res) => {
-  res.json(service.update(req.params.id, req.body));
-});
-
-exports.complete = wrap((req, res) => {
-  res.json(service.complete(req.params.id));
-});
-
-exports.remove = wrap((req, res) => {
-  service.remove(req.params.id);
-  res.status(204).send();
-});
+export const criar = async (req, res) => {
+  try {
+    const dados = req.body || {};
+    const novaTarefa = await tarefasService.criar(dados);
+    return res.status(201).json(novaTarefa);
+  } catch (erro) {
+    return responderErro(res, erro, 'Erro interno ao criar a tarefa.');
+  }
+};
